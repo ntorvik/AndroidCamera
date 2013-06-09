@@ -35,6 +35,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 import android.util.Log;
 
 import wb.android.google.camera.common.ApiHelper;
@@ -397,7 +398,7 @@ public class CameraManager {
 
         public void takePicture2(final ShutterCallback shutter, final PictureCallback raw,
                 final PictureCallback postview, final PictureCallback jpeg,
-                final int cameraState, final int focusState) {
+                final int cameraState, final int focusState, final CameraErrorCallback error) {
             mSig.close();
             // Too many parameters, so use post for simplicity
             mCameraHandler.post(new Runnable() {
@@ -406,9 +407,9 @@ public class CameraManager {
                     try {
                         mCamera.takePicture(shutter, raw, postview, jpeg);
                     } catch (RuntimeException e) {
-                        Log.w(TAG, "take picture failed; cameraState:" + cameraState
-                            + ", focusState:" + focusState);
-                        throw e;
+                        Log.w(TAG, "take picture failed; cameraState:" + cameraState + ", focusState:" + focusState);
+                        //Errors occur with cameraState=1, focusState=3
+                        error.onSRCameraError(e);
                     }
                     mSig.open();
                 }

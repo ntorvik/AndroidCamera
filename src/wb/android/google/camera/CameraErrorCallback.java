@@ -16,11 +16,20 @@
 
 package wb.android.google.camera;
 
+import android.hardware.Camera.Parameters;
 import android.util.Log;
+import android.widget.Toast;
+import wb.android.google.camera.app.GalleryApp;
 
-public class CameraErrorCallback
-        implements android.hardware.Camera.ErrorCallback {
+public class CameraErrorCallback implements android.hardware.Camera.ErrorCallback {
+	
     private static final String TAG = "CameraErrorCallback";
+    
+    private final PhotoModule mPhotoModule;
+    
+    public CameraErrorCallback(PhotoModule photoModule) {
+    	mPhotoModule = photoModule;
+    }
 
     @Override
     public void onError(int error, android.hardware.Camera camera) {
@@ -29,7 +38,21 @@ public class CameraErrorCallback
             // We are not sure about the current state of the app (in preview or
             // snapshot or recording). Closing the app is better than creating a
             // new Camera object.
-            throw new RuntimeException("Media server died.");
+            //throw new RuntimeException("Media server died.");
+        	Toast.makeText(mPhotoModule.getActivity(), mPhotoModule.getActivity().getString(R.string.smartreceipts_error_media_server_died), Toast.LENGTH_LONG).show();
+        	((GalleryApp)mPhotoModule.getActivity().getApplication()).uploadError("Media Server Died - State: " + mPhotoModule.getCameraState());
+        	mPhotoModule.getActivity().finish();
         }
+    }
+    
+    public void onSRCameraError(Exception e) {
+    	//Errors occur with cameraState=1, focusState=3
+    	Toast.makeText(mPhotoModule.getActivity(), mPhotoModule.getActivity().getString(R.string.smartreceipts_error_photo_error), Toast.LENGTH_LONG).show();
+    	Parameters p = mPhotoModule.getCameraParameters();
+    	((GalleryApp)mPhotoModule.getActivity().getApplication()).uploadError(e.toString() + 
+    			"; Fl:" + p.getFlashMode() + "; E:" + p.getExposureCompensation() + "; Fo:" + p.getFocusMode() + 
+    			"; A:" + p.getAntibanding() + "; C:" + p.getColorEffect() + "; Fl:" + p.getFocalLength() + 
+    			"; S:" + p.getSceneMode() + "; W:" + p.getWhiteBalance()); 
+    	mPhotoModule.getActivity().finish();
     }
 }

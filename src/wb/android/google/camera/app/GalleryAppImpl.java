@@ -16,20 +16,18 @@
 
 package wb.android.google.camera.app;
 
-import android.app.Application;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-import wb.android.google.camera.common.ApiHelper;
 import wb.android.google.camera.data.DataManager;
 import wb.android.google.camera.data.DownloadCache;
 import wb.android.google.camera.data.ImageCacheService;
 import wb.android.google.camera.util.GalleryUtils;
 import wb.android.google.camera.util.ThreadPool;
-
-import java.io.File;
+import android.app.Application;
+import android.content.Context;
+import android.os.AsyncTask;
 
 public class GalleryAppImpl extends Application implements GalleryApp {
 
@@ -41,6 +39,7 @@ public class GalleryAppImpl extends Application implements GalleryApp {
     private DataManager mDataManager;
     private ThreadPool mThreadPool;
     private DownloadCache mDownloadCache;
+    private ArrayList<String> mErrorList;
 
     @Override
     public void onCreate() {
@@ -62,6 +61,19 @@ public class GalleryAppImpl extends Application implements GalleryApp {
             mDataManager.initializeSourceMap();
         }
         return mDataManager;
+    }
+    
+    @Override
+    public synchronized List<String> getErrorList() {
+    	if (mErrorList == null) {
+    		mErrorList = new ArrayList<String>();
+    	}
+    	return mErrorList;
+    }
+    
+    @Override
+    public synchronized void uploadError(String error) {
+    	getErrorList().add(error);
     }
 
     @Override

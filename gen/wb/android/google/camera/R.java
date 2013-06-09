@@ -1762,10 +1762,12 @@ CHAR LIMIT = NONE]
          */
         public static int pref_camera_smartreceipts_max_dimension_size=0x7f0e01ac;
         public static int pref_camera_smartreceipts_max_dimension_size_1024px=0x7f0e01ae;
-        public static int pref_camera_smartreceipts_max_dimension_size_1024px_value=0x7f0e01b0;
-        public static int pref_camera_smartreceipts_max_dimension_size_default=0x7f0e01af;
+        public static int pref_camera_smartreceipts_max_dimension_size_1024px_value=0x7f0e01b1;
+        public static int pref_camera_smartreceipts_max_dimension_size_512px=0x7f0e01af;
+        public static int pref_camera_smartreceipts_max_dimension_size_512px_value=0x7f0e01b2;
+        public static int pref_camera_smartreceipts_max_dimension_size_default=0x7f0e01b0;
         public static int pref_camera_smartreceipts_max_dimension_size_default_selection=0x7f0e01ad;
-        public static int pref_camera_smartreceipts_max_dimension_size_default_value=0x7f0e01b1;
+        public static int pref_camera_smartreceipts_max_dimension_size_default_value=0x7f0e01b3;
         /**  Default videocamera flash mode setting.
          */
         public static int pref_camera_video_flashmode_default=0x7f0e0091;
@@ -2150,6 +2152,8 @@ CHAR LIMIT = NONE]
         /**  Title of the Android Dreams slideshow screensaver. [CHAR LIMIT=20] 
          */
         public static int slideshow_dream_name=0x7f0e0193;
+        public static int smartreceipts_error_media_server_died=0x7f0e01b4;
+        public static int smartreceipts_error_photo_error=0x7f0e01b5;
         /**  Low-memory dialog message [CHAR LIMIT=NONE] 
          */
         public static int spaceIsLow_content=0x7f0e00a6;

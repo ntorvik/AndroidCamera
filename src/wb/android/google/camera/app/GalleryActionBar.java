@@ -16,6 +16,10 @@
 
 package wb.android.google.camera.app;
 
+import java.util.ArrayList;
+
+import wb.android.google.camera.R;
+import wb.android.google.camera.common.ApiHelper;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.OnMenuVisibilityListener;
@@ -36,11 +40,7 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.TwoLineListItem;
 
-import wb.android.google.camera.R;
-import wb.android.google.camera.common.ApiHelper;
-
-import java.util.ArrayList;
-
+@TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
 public class GalleryActionBar implements OnNavigationListener {
     @SuppressWarnings("unused")
     private static final String TAG = "GalleryActionBar";
@@ -185,6 +185,7 @@ public class GalleryActionBar implements OnNavigationListener {
         return null;
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public GalleryActionBar(AbstractGalleryActivity activity) {
         mActionBar = activity.getActionBar();
         mContext = activity.getAndroidContext();
@@ -206,6 +207,7 @@ public class GalleryActionBar implements OnNavigationListener {
         titles.toArray(mTitles);
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public int getHeight() {
         return mActionBar != null ? mActionBar.getHeight() : 0;
     }
@@ -232,6 +234,7 @@ public class GalleryActionBar implements OnNavigationListener {
         return sClusterItems[mCurrentIndex].action;
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void enableClusterMenu(int action, ClusterRunner runner) {
         if (mActionBar != null) {
             // Don't set cluster runner until action bar is ready.
@@ -246,6 +249,7 @@ public class GalleryActionBar implements OnNavigationListener {
     // The only use case not to hideMenu in this method is to ensure
     // all elements disappear at the same time when exiting gallery.
     // hideMenu should always be true in all other cases.
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void disableClusterMenu(boolean hideMenu) {
         if (mActionBar != null) {
             mClusterRunner = null;
@@ -262,6 +266,7 @@ public class GalleryActionBar implements OnNavigationListener {
         }
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void enableAlbumModeMenu(int selected, OnAlbumModeSelectedListener listener) {
         if (mActionBar != null) {
             if (mAlbumModeAdapter == null) {
@@ -281,6 +286,7 @@ public class GalleryActionBar implements OnNavigationListener {
         }
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void disableAlbumModeMenu(boolean hideMenu) {
         if (mActionBar != null) {
             mAlbumModeListener = null;
@@ -314,47 +320,56 @@ public class GalleryActionBar implements OnNavigationListener {
         if (mActionBar != null) mActionBar.setHomeButtonEnabled(enabled);
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void setDisplayOptions(boolean displayHomeAsUp, boolean showTitle) {
         if (mActionBar == null) return;
         int options = 0;
         if (displayHomeAsUp) options |= ActionBar.DISPLAY_HOME_AS_UP;
         if (showTitle) options |= ActionBar.DISPLAY_SHOW_TITLE;
 
-        mActionBar.setDisplayOptions(options,
-                ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
-        mActionBar.setHomeButtonEnabled(displayHomeAsUp);
+        mActionBar.setDisplayOptions(options, ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
+        if (ApiHelper.HAS_ACTION_BAR_HOME_BUTTON)
+        	mActionBar.setHomeButtonEnabled(displayHomeAsUp);
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void setTitle(String title) {
         if (mActionBar != null) mActionBar.setTitle(title);
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void setTitle(int titleId) {
         if (mActionBar != null) {
             mActionBar.setTitle(mContext.getString(titleId));
         }
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void setSubtitle(String title) {
         if (mActionBar != null) mActionBar.setSubtitle(title);
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void show() {
         if (mActionBar != null) mActionBar.show();
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void hide() {
         if (mActionBar != null) mActionBar.hide();
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void addOnMenuVisibilityListener(OnMenuVisibilityListener listener) {
         if (mActionBar != null) mActionBar.addOnMenuVisibilityListener(listener);
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public void removeOnMenuVisibilityListener(OnMenuVisibilityListener listener) {
         if (mActionBar != null) mActionBar.removeOnMenuVisibilityListener(listener);
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.HONEYCOMB)
     public boolean setSelectedAction(int type) {
         if (mActionBar == null) return false;
 
@@ -395,26 +410,25 @@ public class GalleryActionBar implements OnNavigationListener {
     private Intent mSharePanoramaIntent;
     private Intent mShareIntent;
 
-    public void createActionBarMenu(int menuRes, Menu menu) {
+    @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
+	public void createActionBarMenu(int menuRes, Menu menu) {
         mActivity.getMenuInflater().inflate(menuRes, menu);
         mActionBarMenu = menu;
-
-        MenuItem item = menu.findItem(R.id.action_share_panorama);
-        if (item != null) {
-            mSharePanoramaActionProvider = (ShareActionProvider)
-                item.getActionProvider();
-            mSharePanoramaActionProvider
-                .setShareHistoryFileName("panorama_share_history.xml");
-            mSharePanoramaActionProvider.setShareIntent(mSharePanoramaIntent);
-        }
-
-        item = menu.findItem(R.id.action_share);
-        if (item != null) {
-            mShareActionProvider = (ShareActionProvider)
-                item.getActionProvider();
-            mShareActionProvider
-                .setShareHistoryFileName("share_history.xml");
-            mShareActionProvider.setShareIntent(mShareIntent);
+        
+        if (ApiHelper.HAS_ICS) {
+	        MenuItem item = menu.findItem(R.id.action_share_panorama);
+	        if (item != null) {
+	            mSharePanoramaActionProvider = (ShareActionProvider) item.getActionProvider();
+	            mSharePanoramaActionProvider.setShareHistoryFileName("panorama_share_history.xml");
+	            mSharePanoramaActionProvider.setShareIntent(mSharePanoramaIntent);
+	        }
+	
+	        item = menu.findItem(R.id.action_share);
+	        if (item != null) {
+	            mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+	            mShareActionProvider.setShareHistoryFileName("share_history.xml");
+	            mShareActionProvider.setShareIntent(mShareIntent);
+	        }
         }
     }
 
@@ -422,14 +436,17 @@ public class GalleryActionBar implements OnNavigationListener {
         return mActionBarMenu;
     }
 
+    @TargetApi(ApiHelper.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void setShareIntents(Intent sharePanoramaIntent, Intent shareIntent) {
         mSharePanoramaIntent = sharePanoramaIntent;
-        if (mSharePanoramaActionProvider != null) {
-            mSharePanoramaActionProvider.setShareIntent(sharePanoramaIntent);
-        }
         mShareIntent = shareIntent;
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
+        if (ApiHelper.HAS_ICS) {
+	        if (mSharePanoramaActionProvider != null) {
+	            mSharePanoramaActionProvider.setShareIntent(sharePanoramaIntent);
+	        }
+	        if (mShareActionProvider != null) {
+	            mShareActionProvider.setShareIntent(shareIntent);
+	        }
         }
     }
 }

@@ -394,10 +394,12 @@
     
     <!-- Smart Receipts - Maximum Dimension Size -->
     <array name="pref_camera_smartreceipts_max_dimension_size_entries" translatable="false">
+        <item>@string/pref_camera_smartreceipts_max_dimension_size_512px</item>
         <item>@string/pref_camera_smartreceipts_max_dimension_size_1024px</item>
         <item>@string/pref_camera_smartreceipts_max_dimension_size_default</item>
     </array>
     <array name="pref_camera_smartreceipts_max_dimension_size_entryvalues" translatable="false">
+        <item>@string/pref_camera_smartreceipts_max_dimension_size_512px_value</item>
         <item>@string/pref_camera_smartreceipts_max_dimension_size_1024px_value</item>
         <item>@string/pref_camera_smartreceipts_max_dimension_size_default_value</item>
     </array>

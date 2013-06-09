@@ -237,7 +237,9 @@ class LocalSource extends MediaSource {
 
     @Override
     public void pause() {
-        mClient.release();
-        mClient = null;
+    	if (mClient != null) {
+	        mClient.release();
+	        mClient = null;
+    	}
     }
 }

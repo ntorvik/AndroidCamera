@@ -265,7 +265,7 @@ public class PhotoModule
             ? new AutoFocusMoveCallback()
             : null;
 
-    private final CameraErrorCallback mErrorCallback = new CameraErrorCallback();
+    private final CameraErrorCallback mErrorCallback = new CameraErrorCallback(this);
 
     private long mFocusStartTime;
     private long mShutterCallbackTime;
@@ -303,6 +303,10 @@ public class PhotoModule
     ConditionVariable mStartPreviewPrerequisiteReady = new ConditionVariable();
 
     private PreviewGestures mGestures;
+    
+    public interface PhotoErrorListener {
+    	public void onCameraErrorOccured();
+    }
 
     // The purpose is not to block the main thread in onCreate and onResume.
     private class CameraStartUpThread extends Thread {
@@ -1130,8 +1134,8 @@ public class PhotoModule
 
         mCameraDevice.takePicture2(mShutterCallback, mRawPictureCallback,
                 mPostViewPictureCallback, new JpegPictureCallback(),
-                mCameraState, mFocusManager.getFocusState());
-
+                mCameraState, mFocusManager.getFocusState(), mErrorCallback);
+        
 
         Size size = mParameters.getPictureSize();
         mImageNamer.prepareUri(mContentResolver, mCaptureStartTime,
@@ -2162,6 +2166,9 @@ public class PhotoModule
     	if (dimString.equals(mActivity.getString(R.string.pref_camera_smartreceipts_max_dimension_size_1024px_value))) {
     		return 1024;
     	}
+    	else if (dimString.equals(mActivity.getString(R.string.pref_camera_smartreceipts_max_dimension_size_512px_value))) {
+    		return 512;
+    	}
     	else { //Default
     		int limit = mActivity.getGLRoot().getTextureSizeLimit();
     		if (mActivity.getGLRoot().getTextureSizeLimit() > 255) {//Basically, testing to make sure a reasonable int came back
@@ -2460,6 +2467,18 @@ public class PhotoModule
         if (mPieRenderer != null && mPieRenderer.showsItems()) {
             mPieRenderer.hide();
         }
+    }
+    
+    public Parameters getCameraParameters() {
+    	return mParameters;
+    }
+    
+    public CameraActivity getActivity() {
+    	return mActivity;
+    }
+    
+    public int getCameraState() {
+    	return mCameraState;
     }
 
 }

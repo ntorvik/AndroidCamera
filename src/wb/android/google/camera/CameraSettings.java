@@ -227,28 +227,29 @@ public class CameraSettings {
 
     private void buildExposureCompensation(
             PreferenceGroup group, IconListPreference exposure) {
-        int max = mParameters.getMaxExposureCompensation();
-        int min = mParameters.getMinExposureCompensation();
+        int max = mParameters.getMaxExposureCompensation();  //[9]
+        int min = mParameters.getMinExposureCompensation(); //[-9]
         if (max == 0 && min == 0) {
             removePreference(group, exposure.getKey());
             return;
         }
-        float step = mParameters.getExposureCompensationStep();
+        float step = mParameters.getExposureCompensationStep(); //.333
 
         // show only integer values for exposure compensation
         int maxValue = (int) FloatMath.floor(max * step);
-        int minValue = (int) FloatMath.ceil(min * step);
+        int minValue = (int) FloatMath.ceil(min * step); 
+        if (maxValue > 3) maxValue = 3; //WRB Hack to try to stop crash at getResourceId below
+        if (minValue < -3) minValue = -3; //WRB Hack to try to stop crash at getResourceId below
         CharSequence entries[] = new CharSequence[maxValue - minValue + 1];
         CharSequence entryValues[] = new CharSequence[maxValue - minValue + 1];
         int[] icons = new int[maxValue - minValue + 1];
-        TypedArray iconIds = mContext.getResources().obtainTypedArray(
-                R.array.pref_camera_exposure_icons);
+        TypedArray iconIds = mContext.getResources().obtainTypedArray(R.array.pref_camera_exposure_icons); //7 icons
         for (int i = minValue; i <= maxValue; ++i) {
-            entryValues[maxValue - i] = Integer.toString(Math.round(i / step));
+            entryValues[maxValue - i] = Integer.toString(Math.round(i / step));		
             StringBuilder builder = new StringBuilder();
             if (i > 0) builder.append('+');
             entries[maxValue - i] = builder.append(i).toString();
-            icons[maxValue - i] = iconIds.getResourceId(3 + i, 0);
+            icons[maxValue - i] = iconIds.getResourceId(3 + i, 0); //err. iconIds no err => icons[]. 3? 3 + -3, 3 + -2, ...
         }
         exposure.setUseSingleIcon(true);
         exposure.setEntries(entries);

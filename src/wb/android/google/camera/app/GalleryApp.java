@@ -16,15 +16,16 @@
 
 package wb.android.google.camera.app;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.Looper;
+import java.util.List;
 
 import wb.android.google.camera.data.DataManager;
 import wb.android.google.camera.data.DownloadCache;
 import wb.android.google.camera.data.ImageCacheService;
 import wb.android.google.camera.util.ThreadPool;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Looper;
 
 public interface GalleryApp {
     public DataManager getDataManager();
@@ -37,4 +38,8 @@ public interface GalleryApp {
     public Looper getMainLooper();
     public ContentResolver getContentResolver();
     public Resources getResources();
+    
+    //SR
+    public List<String> getErrorList();
+    public void uploadError(String error);
 }

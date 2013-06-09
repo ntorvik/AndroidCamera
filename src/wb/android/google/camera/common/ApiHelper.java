@@ -41,6 +41,12 @@ public class ApiHelper {
 
     public static final boolean NEW_SR_CAMERA_IS_SUPPORTED =
     		Build.VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB;
+    		
+    public static final boolean HAS_ACTION_BAR_HOME_BUTTON =
+    		Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH;
+    		
+	public static final boolean HAS_ICS =
+    		Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH;
     
     public static final boolean USE_888_PIXEL_FORMAT =
             Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN;
